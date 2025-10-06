@@ -26,7 +26,7 @@ public:
     }
 
     void flipBit(const int index) {
-        assert(index >= 0 && index < size);
+        assert(index >= 0 && index < size * 8);
         const int byteNo = index / 8;
         const int bitNo = index % 8;
 
@@ -39,4 +39,5 @@ public:
 };
 
 #endif //PROJECT_1_KEY_H
+
 
