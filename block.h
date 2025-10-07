@@ -9,19 +9,19 @@ struct Block {
                             //2d arrays are [row][column]
     std::string printBlock();
 
-    Block() { for (auto & i : state) for (char & j : i) j = 0; }
+    Block() { for (auto & i : state) for (char & j : i) j = 0; }    //Default constructor
 };
 
 class BlockConverter {
 private:
-    std::vector<Block> blocks;
+    std::vector<Block> blocks;  //Holds blocks
 
 public:
-    void convertBlocks(const std::string& fileName);
+    void convertBlocks(const std::string& fileName);    //Converts input from a text file to blocks
 
     std::string print();
 
-    BlockConverter() { blocks.clear(); }
+    BlockConverter() { blocks.clear(); }    //Default constructor
 };
 
 #endif //PROJECT_1_BLOCK_H
