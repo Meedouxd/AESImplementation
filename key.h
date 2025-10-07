@@ -11,10 +11,10 @@ enum KEY_SIZES {
     KEY_256 = 32,   //32 bytes, 256 bits
 };
 
-template<KEY_SIZES size>
+template<KEY_SIZES size>    //Defined differently depending on the size of the key
 class Key {
 private:
-    unsigned char key[size]{};
+    unsigned char key[size]{};  //Array of bytes
 
 public:
     std::string printKey() {    //Outputs key in big endian form
@@ -25,19 +25,17 @@ public:
         return output;
     }
 
-    void flipBit(const int index) {
+    void flipBit(const int index) {     //Flips a bit at a given index
         assert(index >= 0 && index < size * 8);
         const int byteNo = index / 8;
         const int bitNo = index % 8;
 
-        key[byteNo] ^= 1 << bitNo;
+        key[byteNo] ^= 1 << bitNo;  //Bit-shifting to the desired index and flipping
     }
 
-    Key() {
+    Key() {     //Default constructor
         for (unsigned char & i : key) { i = 0; }
     }
 };
 
 #endif //PROJECT_1_KEY_H
-
-
