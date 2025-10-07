@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 
-std::string Block::printBlock() {
+std::string Block::printBlock() {   //Prints in a way that restores input text block
     std::string output;
     for (auto & row : state) {
         for (const char & col : row)
@@ -24,8 +24,7 @@ void BlockConverter::convertBlocks(const std::string& fileName) {
     while (!inputFile.eof()) {
         Block block;
 
-
-        for (auto & row : block.state) {
+        for (auto & row : block.state) {    //Fill block
             for (char & col : row)
                 inputFile.get(col);
         }
@@ -35,7 +34,7 @@ void BlockConverter::convertBlocks(const std::string& fileName) {
     inputFile.close();
 }
 
-std::string BlockConverter::print() {
+std::string BlockConverter::print() {   //Outputs blocks seperated by newlines and bars
     std::string output;
 
     for (auto & block : blocks)
