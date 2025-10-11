@@ -43,12 +43,12 @@ std::string BlockConverter::print() {   //Outputs blocks seperated by newlines a
     return output;
 }
 
-Block BlockConverter::getBlockAt(int index){
+Block* BlockConverter::getBlockAt(int index){
     if(index >= blocks.size()){
         std::cerr << "Error: invalid index selected" << std::endl;
         exit(1);
     }
-    return blocks.at(index);
+    return &blocks.at(index);
 // my cat stepped on my keyboard so Im leaving this here
 //     '[
     

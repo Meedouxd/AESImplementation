@@ -17,14 +17,14 @@ private:
 
 public:
 
-        void shiftRows(Block b) {
+        void shiftRows(Block *b) {
         std::cout << "BEFORE SHIFTING ROWS\n";
-        std::cout << b.printBlock();
+        std::cout << b->printBlock();
         char stateCopy[4][4] = {};
 
         for(int i = 0; i < 4; i++){ // copying block state
             for(int j = 0; j < 4; j++){
-                stateCopy[i][j] = b.state[i][j];
+                stateCopy[i][j] = b->state[i][j];
             }
         }
 
@@ -33,12 +33,12 @@ public:
         for(int i = 1; i < 4; i++){ // for every row besides first
             for(int j = 0; j < 4; j++){
                 int newpos = (j + (4-i)) % 4; // left shifting
-                b.state[i][newpos] = stateCopy[i][j];
+                b->state[i][newpos] = stateCopy[i][j];
             }
 
         }
 
-        std::cout << b.printBlock();
+        // std::cout << b.printBlock();
 
     }
 
@@ -49,6 +49,7 @@ public:
         std::cout << "Done! Printing:" << std::endl;
         std::cout << blockConverter.print();
         shiftRows(blockConverter.getBlockAt(0));
+        std::cout << blockConverter.getBlockAt(0)->printBlock();
     }
 
     // void keyExpansion() {}
@@ -74,7 +75,7 @@ public:
                 Block currentBlock = blockConverter.blocks.at(a);
 
                 subBytes(currentBlock);
-                shiftRows(currentBlock);
+                shiftRows(&currentBlock);
                 mixColumns();
                 addRoundKey();
         }
