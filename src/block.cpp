@@ -42,3 +42,35 @@ std::string BlockConverter::print() {   //Outputs blocks seperated by newlines a
 
     return output;
 }
+
+Block BlockConverter::getBlockAt(int index){
+    if(index >= blocks.size()){
+        std::cerr << "Error: invalid index selected" << std::endl;
+        exit(1);
+    }
+    return blocks.at(index);
+// my cat stepped on my keyboard so Im leaving this here
+//     '[
+    
+//     9uuuuuuuuuu
+// ]]]]]]]]g9nm]'
+}
+
+char* BlockConverter::blockToBytes(int index){
+    char byteArray[16] = {}; // enter array
+
+    if(blocks.size() >= index){
+        std::cerr << "Error: invalid index selected" << std::endl;
+        exit(1);
+    }
+
+    Block targetBlock = blocks.at(index);
+
+    for(int a = 0; a < 4; a++){
+        for(int b = 0; b < 4; b++){
+            int currentIndex = (a*4) + b;
+            byteArray[currentIndex] = targetBlock.state[a][b];
+        }
+    }
+    return &byteArray[0];
+}

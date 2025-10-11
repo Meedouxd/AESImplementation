@@ -21,7 +21,11 @@ public:
 
     std::string print();
 
+    char* blockToBytes(int blockIndex); // convert 4 x 4 byte matrix to 16 bytes
+
     BlockConverter() { blocks.clear(); }    //Default constructor
+
+    Block getBlockAt(int index);
 };
 
 #endif //PROJECT_1_BLOCK_H

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cassert>
+#include <vector>
 
 //The three supported sized of keys in AES
 enum KEY_SIZES {
@@ -35,6 +36,11 @@ public:
 
     Key() {     //Default constructor
         for (unsigned char & i : key) { i = 0; }
+    }
+
+    std::vector<Key<KEY_128>> getExpandedKeys(){  // expand the keys to 10 since we are doing 128 bit keys.
+        std::vector<Key<KEY_128>> expandedKeyList;
+        return expandedKeyList;
     }
 };
 
