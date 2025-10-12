@@ -74,3 +74,7 @@ char* BlockConverter::blockToBytes(int index){
     }
     return &byteArray[0];
 }
+
+int BlockConverter::getNumOfBlocks(){
+    return blocks.size();
+}

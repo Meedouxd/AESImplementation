@@ -26,6 +26,8 @@ public:
     BlockConverter() { blocks.clear(); }    //Default constructor
 
     Block* getBlockAt(int index);
+
+    int getNumOfBlocks();
 };
 
 #endif //PROJECT_1_BLOCK_H

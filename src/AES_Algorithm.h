@@ -42,20 +42,48 @@ public:
 
     }
 
+    void addRoundKey(Block *b, Key<KEY_128> k) {
+        std::string byteStr = b->printBlock();
+        std::cout << "Adding Round Key...";
+
+        if(byteStr.length() != k.toString().length()){
+
+            std::cout << byteStr.length() << ": " << key.printKey().length();
+            std::cerr << "Invalid block or key length\n";
+            exit(1);
+        }
+
+        for(int i = 0; i < byteStr.length(); i++){
+            unsigned char chunk = byteStr.at(i);
+            unsigned char keyByte = k.toString().at(i);
+            std::cout << "Block byte: " << chunk << std::endl;
+            std::cout << "Key Byte: " << keyByte << std::endl;
+            chunk ^= keyByte;   // XOR round key with data
+            byteStr[i] = chunk;
+            std::cout << "XORED: " << chunk << std::endl;
+        }
+
+    }
+
     void init() {   //Gets input from file and processes it into blocks
         std::cout << "Enter file name: " << std::endl;
         std::cin >> inputFile;
         blockConverter.convertBlocks(inputFile);
         std::cout << "Done! Printing:" << std::endl;
         std::cout << blockConverter.print();
-        shiftRows(blockConverter.getBlockAt(0));
-        std::cout << blockConverter.getBlockAt(0)->printBlock();
+        unsigned char keybits[16] = {1,1,1,1,
+            1,1,1,1,
+            1,1,1,1,
+            1,1,1,1};
+        Key<KEY_128> testKey(keybits);
+        addRoundKey(blockConverter.getBlockAt(0), testKey);
+        // shiftRows(blockConverter.getBlockAt(0));
+        // std::cout << blockConverter.getBlockAt(0)->printBlock();
     }
 
     // void keyExpansion() {}
 
-    void addRoundKey() {}
-
+    
     void subBytes() {}
 
 
@@ -67,17 +95,17 @@ public:
     void encrypt() {    //Following AES protocols
         // addRoundKey();
         std::vector<Key<KEY_128>> expandedKeys = key.getExpandedKeys();
-        for(int a = 0; a <blockConverter.blocks.size(); a++){
+        for(int a = 0; a < blockConverter.blocks.size(); a++){
 
             for (int i = 0; i < numProcessingSteps; i++) {   //9-13 rounds depending on key size
 
                 Key currentKey = expandedKeys.at(numProcessingSteps);
-                Block currentBlock = blockConverter.blocks.at(a);
+                Block* currentBlock = blockConverter.getBlockAt(a);
 
                 subBytes(currentBlock);
-                shiftRows(&currentBlock);
+                shiftRows(currentBlock);
                 mixColumns();
-                addRoundKey();
+                addRoundKey(currentBlock, currentKey);
         }
 
         subBytes();

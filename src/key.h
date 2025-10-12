@@ -38,9 +38,24 @@ public:
         for (unsigned char & i : key) { i = 0; }
     }
 
+    Key(unsigned char* arr){
+        for(int i = 0; i < 16; i++){
+            key[i] = arr[i];
+        }
+    }
+
     std::vector<Key<KEY_128>> getExpandedKeys(){  // expand the keys to 10 since we are doing 128 bit keys.
         std::vector<Key<KEY_128>> expandedKeyList;
         return expandedKeyList;
+    }
+
+    std::string toString(){
+        std::string returnValue = "";
+        for(int i = 0; i < 16; i++){
+            returnValue += key[i];
+        }
+
+        return returnValue;
     }
 };
 
