@@ -57,7 +57,7 @@ Block* BlockConverter::getBlockAt(int index){
 }
 
 char* BlockConverter::blockToBytes(int index){
-    char byteArray[16] = {}; // enter array
+    char* byteArray = new char[16]; // enter array
 
     if(blocks.size() >= index){
         std::cerr << "Error: invalid index selected" << std::endl;

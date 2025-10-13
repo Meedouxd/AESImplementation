@@ -17,6 +17,42 @@ private:
 
 public:
 
+        unsigned char getResultantValue(unsigned char* stateRow, unsigned char* mixMatrixColumn){
+            unsigned char result = 0;
+            std::cout << "Get resultant value called\n";
+
+            for(int i = 0; i < 4; i++){
+                unsigned char multiplier = mixMatrixColumn[i];
+                unsigned char stateByte = stateRow[i];
+
+                std::cout << "multiplier: " << std::hex << (int) multiplier << std::endl;
+                std::cout << "stateByte: " << stateByte << std::endl;
+
+                if(multiplier < 1 || multiplier > 3){
+                    std::cerr << "Error: mix matrix must have values between 1 and 3\n";
+                    exit(1);
+                }
+
+                unsigned int partialSum = 0;
+                // https://www.tutorialspoint.com/cryptography/cryptography_mixcolumns_transformation.htm
+                // begin code that I didnt write lol
+                for (int i = 0; i < 8; i++) {
+                    if ((stateByte & 1) != 0) {
+                        partialSum ^= multiplier;
+                    }
+                    int hiBitSet = multiplier & 0x80;
+                    multiplier <<= 1;
+                    if (hiBitSet != 0) {
+                        multiplier ^= 0x1B;
+                    }
+                    stateByte = stateByte >> 1;
+                }
+                result ^= partialSum;
+            }
+            // end code that I didnt write lol
+            return result;
+        }
+
         void shiftRows(Block *b) {
         std::cout << "BEFORE SHIFTING ROWS\n";
         std::cout << b->printBlock();
@@ -65,6 +101,52 @@ public:
 
     }
 
+    // tested :D
+    void mixColumns(Block* b) {
+        char carry[4] = {0, 0, 0, 0};
+
+        unsigned char copyState[4][4] = {};
+
+        
+        for(int i = 0; i < 4; i++){ // copy original state matrix
+            for(int j = 0; j < 4; j++){
+                copyState[i][j] = b->state[i][j];
+            }
+        }
+
+        unsigned char mixMatrix[4][4] = {2, 3, 1, 1,
+                                         1, 2, 3, 1,
+                                         1, 1, 2, 3,
+                                         3, 1, 1, 2};
+        int resultantIndex = 0; 
+        for(int i = 0; i < 4; i++){
+            unsigned char stateRow[4] = {copyState[0][i], copyState[1][i], copyState[2][i], copyState[3][i]};
+            for(int j = 0; j < 4; j++){
+                unsigned char resultantValue = 0;
+                unsigned char mixMatrixColumn[4] = {mixMatrix[j][0], mixMatrix[j][1], mixMatrix[j][2], mixMatrix[j][3]};
+
+                resultantValue = getResultantValue(stateRow, mixMatrixColumn);
+
+                int rowIndex = resultantIndex % 4;
+                int columnIndex = resultantIndex / 4;
+                b->state[rowIndex][columnIndex] = resultantValue;
+                resultantIndex++;
+            }
+        }
+
+        std::cout << "printing out the corresponding state:\n";
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                std::cout << std::hex << (int) b->state[i][j];
+                std:: cout << " ";
+            }
+            std::cout << std::endl;
+        }
+        
+
+
+    }
+
     void init() {   //Gets input from file and processes it into blocks
         std::cout << "Enter file name: " << std::endl;
         std::cin >> inputFile;
@@ -76,8 +158,11 @@ public:
             1,1,1,1,
             1,1,1,1};
         Key<KEY_128> testKey(keybits);
-        addRoundKey(blockConverter.getBlockAt(0), testKey);
-        subBytes(blockConverter.getBlockAt(0));
+        // addRoundKey(blockConverter.getBlockAt(0), testKey);
+        // subBytes(blockConverter.getBlockAt(0));
+        std::cout << blockConverter.getBlockAt(0)->printBlock() << std::endl;
+        mixColumns(blockConverter.getBlockAt(0));
+        // std::cout << blockConverter.getBlockAt(0)->printBlock() << std::endl;
         // shiftRows(blockConverter.getBlockAt(0));
         // std::cout << blockConverter.getBlockAt(0)->printBlock();
     }
@@ -125,9 +210,7 @@ public:
 
 
 
-    void mixColumns() {
-        char carry[4] = {0, 0, 0, 0};
-    }
+
 
     void encrypt() {    //Following AES protocols
         // addRoundKey();
