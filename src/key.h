@@ -65,7 +65,7 @@ public:
         }
     }
 
-    unsigned char* XORWords(unsigned char* wordArrOne, unsigned char* wordArrTwo){
+    static unsigned char* XORWords(unsigned char* wordArrOne, unsigned char* wordArrTwo){
         unsigned char* returnVal = new unsigned char[4];
         for(int i = 0; i < 4; i++){
             returnVal[i] = (wordArrOne[i] ^ wordArrTwo[i]);
@@ -74,7 +74,7 @@ public:
         return returnVal;
     }
     // for key expansion
-    void XORRcon(unsigned char* wordArray, int round){
+    static void XORRcon(unsigned char* wordArray, int round){
 
         // table found at: https://en.wikipedia.org/wiki/AES_key_schedule#Rcon
         unsigned char RCON[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
@@ -87,14 +87,14 @@ public:
     }
 
     // for key expansion
-    void subWords(unsigned char* wordArray){
+    static void subWords(unsigned char* wordArray){
         for(int i = 0; i < 4; i++){
             wordArray[i] = substitutionBox[wordArray[i]];
         }
     }
 
     // for key expansion
-    void rotWord(unsigned char* wordArray){ // left shift each byte once
+    static void rotWord(unsigned char* wordArray){ // left shift each byte once
         unsigned char copy[4] = {wordArray[0], wordArray[1], wordArray[2], wordArray[3]};
 
         for(int i = 0; i < 4; i++){
@@ -102,7 +102,7 @@ public:
         }
     }
 
-    unsigned char* getWordFromColumn(Key k, int columnIndex){
+    static unsigned char* getWordFromColumn(Key k, int columnIndex){
         std::string kStr = k.toString();
 
         int offset = columnIndex * 4;
@@ -117,10 +117,13 @@ public:
 
     }
     // https://www.kavaliro.com/wp-content/uploads/2014/03/AES.pdf
-    std::vector<Key<KEY_128>> getExpandedKeys(){  // expand the keys to 10 since we are doing 128 bit keys.
+        static std::vector<Key<KEY_128>> getExpandedKeys(Key<KEY_128> firstKey){  // expand the keys to 10 since we are doing 128 bit keys.
         std::vector<Key<KEY_128>> expandedKeyList;
 
-        expandedKeyList.push_back(*this); // round 0 key
+        std::cout << "First KEy:\n";
+        firstKey.printHex();
+        
+        expandedKeyList.push_back(firstKey); // round 0 key
 
         for(int i = 0; i < 10; i++){
             unsigned char newKeyBytes[16] = {};
@@ -151,7 +154,13 @@ public:
             Key<KEY_128> nextKey = Key(newKeyBytes);
             
             expandedKeyList.push_back(nextKey);
-            
+
+        }
+
+        std::cout <<"Printing out expanded key list\n";
+
+        for(Key<KEY_128> key : expandedKeyList){
+            key.printHex();
         }
 
         return expandedKeyList;

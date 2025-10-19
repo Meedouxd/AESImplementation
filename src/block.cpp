@@ -12,6 +12,18 @@ std::string Block::printBlock() {   //Prints in a way that restores input text b
     return output;
 }
 
+void Block::hexPrint(){ //prints a block pretty
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+            std::cout << std::hex << (int) state[i][j];
+            std::cout << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
+}
+
+
 void BlockConverter::convertBlocks(const std::string& fileName) {
     std::ifstream inputFile;
     inputFile.open(fileName);
@@ -78,3 +90,4 @@ char* BlockConverter::blockToBytes(int index){
 int BlockConverter::getNumOfBlocks(){
     return blocks.size();
 }
+
