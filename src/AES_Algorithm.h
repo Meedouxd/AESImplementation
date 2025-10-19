@@ -66,7 +66,7 @@ public:
             return result;
         }
 
-        void shiftRows(Block *b) {
+    void shiftRows(Block *b) {
         char stateCopy[4][4] = {};
 
         for(int i = 0; i < 4; i++){ // copying block state
@@ -75,15 +75,13 @@ public:
             }
         }
 
-        for(int i = 1; i < 4; i++){ // for every row besides first
+        for(int i = 0; i < 4; i++){ // for every row besides first
             for(int j = 0; j < 4; j++){
                 int newpos = (j + (4-i)) % 4; // left shifting
                 b->state[i][newpos] = stateCopy[i][j];
             }
 
         }
-
-        // std::cout << b.printBlock();
 
     }
     // needs testing
@@ -104,7 +102,7 @@ public:
 
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
-                b->state[i][j] ^= k.toString().at((i*4)+j);
+                b->state[i][j] ^= k.toString().at((j*4)+i);
             }
         }
 
@@ -178,8 +176,8 @@ public:
             addRoundKey(currentBlock, expandedKeys.at(0)); // 0th round only add round key
             std::cout << "AFter adding round key:\n";
             currentBlock->hexPrint();
-            for (int i = 1; i < numProcessingSteps; i++) {   //9-13 rounds depending on key size
-
+            for (int i = 1; i <= numProcessingSteps; i++) {   //9-13 rounds depending on key size
+                std::cout << "Round " << i << std::endl;
                 Key currentKey = expandedKeys.at(i);
                 
 
@@ -206,7 +204,7 @@ public:
                 std::cout << "AFter adding round key:\n";
                 currentBlock->hexPrint();
         }
-
+        std::cout << "Round " << numProcessingSteps+1 << " (Last Round)\n";
         // last round skips mix columns
         subBytes(currentBlock);
         std::cout << "AFter sub bytes:\n";
@@ -247,10 +245,7 @@ public:
         key = Key<KEY_128>(keybits);
 
         encrypt();
-
-        for(int i = 0; i < blockConverter.getNumOfBlocks(); i++){
-            blockConverter.getBlockAt(i)->hexPrint();
-        }
+        
         // std::vector<Key<KEY_128>> expandedKeyLists = testKey.getExpandedKeys();
 
         // std::cout << "**** KEY TESTING ****\n";

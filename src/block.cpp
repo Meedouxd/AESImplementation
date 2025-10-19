@@ -12,10 +12,10 @@ std::string Block::printBlock() {   //Prints in a way that restores input text b
     return output;
 }
 
-void Block::hexPrint(){ //prints a block pretty
+void Block::hexPrint(){ //prints a block 
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++){
-            std::cout << std::hex << (int) state[i][j];
+            std::cout << std::hex << (unsigned int) state[i][j];
             std::cout << " ";
         }
         std::cout << "\n";
@@ -36,10 +36,19 @@ void BlockConverter::convertBlocks(const std::string& fileName) {
     while (!inputFile.eof()) {
         Block block;
 
-        for (auto & row : block.state) {    //Fill block
-            for (char & col : row)
-                inputFile.get(col);
+        // for (auto & row : block.state) {    //Fill block
+        //     for (char & col : row)
+        //         inputFile.get(col);
+        // }
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                char c = 0;
+                inputFile.get(c);
+                block.state[j][i] = c; // fill it column by column
+            }
         }
+
         blocks.push_back(block);
     }
 
@@ -68,24 +77,24 @@ Block* BlockConverter::getBlockAt(int index){
 // ]]]]]]]]g9nm]'
 }
 
-char* BlockConverter::blockToBytes(int index){
-    char* byteArray = new char[16]; // enter array
+// char* BlockConverter::blockToBytes(int index){
+//     char* byteArray = new char[16]; // enter array
 
-    if(blocks.size() >= index){
-        std::cerr << "Error: invalid index selected" << std::endl;
-        exit(1);
-    }
+//     if(blocks.size() >= index){
+//         std::cerr << "Error: invalid index selected" << std::endl;
+//         exit(1);
+//     }
 
-    Block targetBlock = blocks.at(index);
+//     Block targetBlock = blocks.at(index);
 
-    for(int a = 0; a < 4; a++){
-        for(int b = 0; b < 4; b++){
-            int currentIndex = (a*4) + b;
-            byteArray[currentIndex] = targetBlock.state[a][b];
-        }
-    }
-    return &byteArray[0];
-}
+//     for(int a = 0; a < 4; a++){
+//         for(int b = 0; b < 4; b++){
+//             int currentIndex = (a*4) + b;
+//             byteArray[currentIndex] = targetBlock.state[a][b];
+//         }
+//     }
+//     return &byteArray[0];
+// }
 
 int BlockConverter::getNumOfBlocks(){
     return blocks.size();
