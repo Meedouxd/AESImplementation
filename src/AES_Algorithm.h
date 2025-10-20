@@ -133,7 +133,7 @@ public:
 
         std::vector<Key<KEY_128>> expandedKeys = Key<KEY_128>::getExpandedKeys(k);
 
-        for(int a = 0; a < 1; a++){
+        for(int a = 0; a < dataBlocks.getNumOfBlocks(); a++){
 
             Block* currentBlock = dataBlocks.getBlockAt(a);
 

@@ -7,6 +7,7 @@ int main() {
     std::string plainTextLocation;
     unsigned char zeroKeyBits[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     Key<KEY_128> keyVarKey(zeroKeyBits);
+    Key<KEY_128> keyVarPlain(zeroKeyBits);
 
     AES.init();
 
