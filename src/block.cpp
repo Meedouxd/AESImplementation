@@ -4,9 +4,12 @@
 
 std::string Block::printBlock() {   //Prints in a way that restores input text block
     std::string output;
-    for (auto & row : state) {
-        for (const char & col : row)
-            output += col;
+
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+
+            output += state[j][i];
+        }
     }
 
     return output;
@@ -35,11 +38,6 @@ void BlockConverter::convertBlocks(const std::string& fileName) {
 
     while (!inputFile.eof()) {
         Block block;
-
-        // for (auto & row : block.state) {    //Fill block
-        //     for (char & col : row)
-        //         inputFile.get(col);
-        // }
 
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
@@ -70,33 +68,24 @@ Block* BlockConverter::getBlockAt(int index){
         exit(1);
     }
     return &blocks.at(index);
-// my cat stepped on my keyboard so Im leaving this here
-//     '[
-    
-//     9uuuuuuuuuu
-// ]]]]]]]]g9nm]'
+    // my cat stepped on my keyboard so Im leaving this here
+    //     '[
+        
+    //     9uuuuuuuuuu
+    // ]]]]]]]]g9nm]'
 }
-
-// char* BlockConverter::blockToBytes(int index){
-//     char* byteArray = new char[16]; // enter array
-
-//     if(blocks.size() >= index){
-//         std::cerr << "Error: invalid index selected" << std::endl;
-//         exit(1);
-//     }
-
-//     Block targetBlock = blocks.at(index);
-
-//     for(int a = 0; a < 4; a++){
-//         for(int b = 0; b < 4; b++){
-//             int currentIndex = (a*4) + b;
-//             byteArray[currentIndex] = targetBlock.state[a][b];
-//         }
-//     }
-//     return &byteArray[0];
-// }
 
 int BlockConverter::getNumOfBlocks(){
     return blocks.size();
+}
+
+void BlockConverter::writeToFile(std::string outputLocation){
+    std::ofstream cipherfile(outputLocation);
+
+        for(int i = 0; i < getNumOfBlocks(); i++){
+            cipherfile << (getBlockAt(i)->printBlock());
+        }
+
+        cipherfile.close();
 }
 

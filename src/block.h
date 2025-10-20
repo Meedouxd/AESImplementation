@@ -28,6 +28,8 @@ public:
     Block* getBlockAt(int index);
 
     int getNumOfBlocks();
+
+    void writeToFile(std::string ol);
 };
 
 #endif //PROJECT_1_BLOCK_H

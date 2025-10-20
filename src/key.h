@@ -47,6 +47,14 @@ public:
         return output;
     }
 
+    std::string keyFileName(){
+        std::string output;
+        for (const unsigned char & i : key){
+            output += std::to_string((int)i) + "_";
+        }
+        return output;
+    }
+
     void flipBit(const int index) {     //Flips a bit at a given index
         assert(index >= 0 && index < size * 8);
         const int byteNo = index / 8;
@@ -120,8 +128,8 @@ public:
         static std::vector<Key<KEY_128>> getExpandedKeys(Key<KEY_128> firstKey){  // expand the keys to 10 since we are doing 128 bit keys.
         std::vector<Key<KEY_128>> expandedKeyList;
 
-        std::cout << "First KEy:\n";
-        firstKey.printHex();
+        // std::cout << "First KEy:\n";
+        // firstKey.printHex();
         
         expandedKeyList.push_back(firstKey); // round 0 key
 
@@ -157,11 +165,11 @@ public:
 
         }
 
-        std::cout <<"Printing out expanded key list\n";
+        // std::cout <<"Printing out expanded key list\n";
 
-        for(Key<KEY_128> key : expandedKeyList){
-            key.printHex();
-        }
+        // for(Key<KEY_128> key : expandedKeyList){
+        //     key.printHex();
+        // }
 
         return expandedKeyList;
     }
