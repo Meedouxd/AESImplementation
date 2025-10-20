@@ -10,10 +10,6 @@
 template <KEY_SIZES size>   //Defined differently depending on the size of the key
 class AES_Algorithm {
 private:
-    // Key<size> key;
-    // BlockConverter blockConverter;
-
-    // std::string inputFile;  //Input file name
     int numProcessingSteps = 0; //numProcessingSteps is the number of times that step 3 is repeated
 
 public:
@@ -127,9 +123,8 @@ public:
         }
     }
 
-    BlockConverter encrypt(std::string inputFile, Key<KEY_128> k) {    //Following AES protocols
-        BlockConverter dataBlocks;
-        dataBlocks.convertBlocks(inputFile);
+    BlockConverter encrypt(BlockConverter dataBlocks, Key<KEY_128> k) {    //Following AES protocols
+        
 
         std::vector<Key<KEY_128>> expandedKeys = Key<KEY_128>::getExpandedKeys(k);
 
@@ -192,25 +187,6 @@ public:
         return dataBlocks;
         
     }
-
-    // void writeToFile(){
-    //     std::ofstream cipherfile("ciphertext.txt");
-
-    //     for(int i = 0; i < blockConverter.getNumOfBlocks(); i++){
-    //         cipherfile << (blockConverter.getBlockAt(i)->printBlock());
-    //     }
-
-    //     cipherfile.close();
-
-    // }
-
-    // void flipRandomBit() {  //Gets a random index and flips the associated bit
-    //     std::random_device rd;
-    //     std::mt19937 gen(rd());
-    //     std::uniform_int_distribution<> distrib(0, size * 8 - 1);   //Between 0 and bit size - 1
-
-    //     key.flipBit(distrib(gen));  //Random bit flipped
-    // }
 
     AES_Algorithm() {   //Default constructor
         if (size == KEY_128) { numProcessingSteps = 9; }

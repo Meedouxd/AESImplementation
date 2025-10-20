@@ -30,6 +30,8 @@ public:
     int getNumOfBlocks();
 
     void writeToFile(std::string ol);
+
+    void flipBitAtIndex(int i);
 };
 
 #endif //PROJECT_1_BLOCK_H

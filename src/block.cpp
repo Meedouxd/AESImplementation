@@ -89,3 +89,26 @@ void BlockConverter::writeToFile(std::string outputLocation){
         cipherfile.close();
 }
 
+void BlockConverter::flipBitAtIndex(int index){
+    int blockNumber = index / (16 * 8);
+    int byteNumber = index % 16;
+
+    int stateColumnNumber = byteNumber % 4;
+    int stateRowNumber = byteNumber / 4;
+
+    int bitNumber = index % (8);
+    
+    // std::cout << "Index: " << index << std::endl;
+    // std::cout << "Block Number: " << blockNumber << std::endl;
+    // std::cout << "Byte Number: " << byteNumber << std::endl;
+    // std::cout << "State Column Number: " << stateColumnNumber << std::endl;
+    // std::cout << "State Row Number: " << stateRowNumber << std::endl;
+    // std::cout << "Bit Number: " << bitNumber << std::endl;
+
+    unsigned char newByte = getBlockAt(blockNumber)->state[stateColumnNumber][stateRowNumber];
+
+    newByte ^= (1 << bitNumber); //thanks ambroce for this code snippet
+
+    getBlockAt(blockNumber)->state[stateColumnNumber][stateRowNumber] = newByte;
+
+}
