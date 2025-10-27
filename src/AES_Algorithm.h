@@ -25,7 +25,7 @@ public:
 
             for(int i = 0; i < 4; i++){
                 for(int j = 0; j < 4; j++){
-                    b->state[i][j] = Key<KEY_128>::substitutionBox[copyState[i][j]];
+                    b->state[i][j] = substitutionBox[copyState[i][j]];
                 }
             }
         }

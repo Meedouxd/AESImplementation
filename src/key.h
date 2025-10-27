@@ -140,8 +140,8 @@ public:
 
             for(int j = 1; j < 4; j++) {
                 for(int k = 0; k < 4; k++)
-                    newKeyBytes[keyByteIndex++] = wordToAdd[j];
-                wordToAdd = XORWords(wordToAdd, getWordFromColumn(previousKey, i));
+                    newKeyBytes[keyByteIndex++] = wordToAdd[k];
+                wordToAdd = XORWords(wordToAdd, getWordFromColumn(previousKey, j));
             }
 
             for(int j = 0; j < 4; j++)
