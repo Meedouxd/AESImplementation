@@ -1,6 +1,9 @@
 #include "AES_Algorithm.h"
 #include <iostream>
 #include <bits/stdc++.h>
+#include <array>
+#include <fstream>
+#include <filesystem>
 
 // clear keyvar and plaintextvar/ on every run
 void clearFolder(std::string folderPath)
@@ -20,6 +23,29 @@ std::string getFlippedDataBitsFileName(std::vector<int> v, int iterator_index){
     }
 
     return rv;
+}
+
+// Save histogram of byte frequencies to CSV
+void saveHistogram(const std::string& filename)
+{
+    std::ifstream in(filename, std::ios::binary);
+    if (!in.is_open())
+    {
+        std::cerr << "Could not open file: " << filename << std::endl;
+        return;
+    }
+
+    std::array<int, 256> freq = {0};
+    char c;
+    while (in.get(c))
+        freq[(unsigned char)c]++;
+
+    std::string csvName = filename + "_histogram.csv";
+    std::ofstream out(csvName);
+    for (int i = 0; i < 256; ++i)
+        out << i << "," << freq[i] << "\n";
+
+    std::cout << "Histogram saved to " << csvName << std::endl;
 }
 
 int main() {
@@ -99,6 +125,7 @@ int main() {
         std::cout << "Output Name: " << outputName << std::endl;
 
         newDataBlocks.writeToFile(outputName);
+        saveHistogram(outputName);
 
         keyVarKey.flipBit(keyBitsFlipped.at(i));
     }
@@ -119,6 +146,7 @@ int main() {
         std::cout << "Output Name: " << outputName << std::endl;
 
         newDataBlocks.writeToFile(outputName);
+        saveHistogram(outputName);
 
         keyVarKey.flipBit(keyBitsFlipped.at(i));
     }
