@@ -55,11 +55,6 @@ int main() {
 
     std::string plainTextLocation; // location of the plaintext file
 
-    std::vector<double> keyVarEntropies;
-    std::vector<double> keyVarRandoms;
-    std::vector<double> cipherEntropies;
-    std::vector<double> cipherRandoms;
-
     // creation of the two keys to keep track of: key-variable key (changes every iteration)
     // and keyVarPlain (does not change)
     unsigned char zeroKeyBits[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -120,14 +115,25 @@ int main() {
     }
 
     //key differential
+
+    std::ofstream keyEntropyFile("keyvar/entropy.csv");
+    std::ofstream keyRandomnessFile("keyvar/randomness.csv");
+    
     for(int i = 0; i < 20; i++){
 
         BlockConverter newDataBlocks = AES.encrypt(dataBlocks, keyVarKey);
 
         //Calculate Entropy and Randomness Here
         double nextEntropy = EntropyRandomness::calculateEntropy(newDataBlocks);
-        
-        keyVarEntropies.push_back(nextEntropy);
+        double nextRandomness = EntropyRandomness::calculateRandomness(newDataBlocks);
+
+        keyEntropyFile << nextEntropy;
+        keyRandomnessFile << nextRandomness;
+
+        if(i < 19){
+            keyEntropyFile << ",";
+            keyRandomnessFile << ",";
+        }
 
         std::string outputName = "keyvar/";
         outputName += keyVarKey.keyFileName();
@@ -140,12 +146,17 @@ int main() {
 
         keyVarKey.flipBit(keyBitsFlipped.at(i));
 
-        
+
     }
+
+    keyEntropyFile.close();
+    keyRandomnessFile.close();
 
 
     // plain text data differential
     BlockConverter plainTextCopy = dataBlocks; //shallow copy block converter of OG data
+    std::ofstream cipherEntropyFile("plaintextvar/entropy.csv");
+    std::ofstream cipherRandomFile("plaintextvar/randomness.csv");
 
     for(int i = 0; i < 20; i++){
         plainTextCopy.flipBitAtIndex(plainTextBitsFlipped.at(i));
@@ -154,9 +165,16 @@ int main() {
 
         //Calculate Entropy and Randomness Here
         double nextEntropy = EntropyRandomness::calculateEntropy(newDataBlocks);
-        
-        cipherEntropies.push_back(nextEntropy);
+        double nextRandomness = EntropyRandomness::calculateRandomness(newDataBlocks);
 
+        cipherEntropyFile << nextEntropy;
+        cipherRandomFile << nextRandomness;
+
+        if(i < 19){
+            cipherEntropyFile << ",";
+            cipherRandomFile << ",";
+        }
+        
         std::string outputName = "plaintextvar/";
         outputName += getFlippedDataBitsFileName(plainTextBitsFlipped, i);
         outputName += ".txt";
@@ -168,6 +186,9 @@ int main() {
 
         keyVarKey.flipBit(keyBitsFlipped.at(i));
     }
+
+    cipherEntropyFile.close();
+    cipherRandomFile.close();
     
     return 0;
 }

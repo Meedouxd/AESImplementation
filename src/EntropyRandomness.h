@@ -51,4 +51,50 @@ class EntropyRandomness{
 
             return entropy * -1;
         }
+
+        // statistical randomness frequency test
+        // https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/freqtest.htm
+        static double calculateRandomness(BlockConverter cipherBlock){
+
+            double randomness = 0.0;
+
+            int oneCount = 0;
+            int zeroCount = 0;
+            for(int i = 0; i < cipherBlock.getNumOfBlocks(); i++){
+                for(int a = 0; a < 4; a++){
+                    for(int b = 0; b < 4; b++){
+                        
+                        unsigned char val = cipherBlock.getBlockAt(i)->state[a][b];
+
+                        int one = getNumberOfOnes(val);
+                        int zero = 8 - one;
+
+                        oneCount += one;
+                        zeroCount += zero;
+                    }
+                }
+            }
+
+            randomness = abs(oneCount - zeroCount);
+            
+
+
+            return pow(randomness, 0.5); // average frequency 
+        }
+
+        static int getNumberOfOnes(unsigned char c){
+
+            int oneCount = 0;
+
+            int abs = (int) c;
+
+            while(abs > 0){
+                if(abs % 2 == 1){
+                    oneCount++;
+                }
+                abs /= 2;
+            }
+
+            return oneCount;
+        }
 };
