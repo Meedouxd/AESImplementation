@@ -1,4 +1,5 @@
 #include "AES_Algorithm.h"
+#include "EntropyRandomness.h"
 #include <iostream>
 #include <bits/stdc++.h>
 #include <array>
@@ -53,6 +54,11 @@ int main() {
     AES_Algorithm<KEY_128> AES; // AES object for encrypting
 
     std::string plainTextLocation; // location of the plaintext file
+
+    std::vector<double> keyVarEntropies;
+    std::vector<double> keyVarRandoms;
+    std::vector<double> cipherEntropies;
+    std::vector<double> cipherRandoms;
 
     // creation of the two keys to keep track of: key-variable key (changes every iteration)
     // and keyVarPlain (does not change)
@@ -118,6 +124,11 @@ int main() {
 
         BlockConverter newDataBlocks = AES.encrypt(dataBlocks, keyVarKey);
 
+        //Calculate Entropy and Randomness Here
+        double nextEntropy = EntropyRandomness::calculateEntropy(newDataBlocks);
+        
+        keyVarEntropies.push_back(nextEntropy);
+
         std::string outputName = "keyvar/";
         outputName += keyVarKey.keyFileName();
         outputName += ".txt";
@@ -125,9 +136,11 @@ int main() {
         std::cout << "Output Name: " << outputName << std::endl;
 
         newDataBlocks.writeToFile(outputName);
-        saveHistogram(outputName);
+        // saveHistogram(outputName);
 
         keyVarKey.flipBit(keyBitsFlipped.at(i));
+
+        
     }
 
 
@@ -139,6 +152,11 @@ int main() {
 
         BlockConverter newDataBlocks = AES.encrypt(plainTextCopy, keyVarKey);
 
+        //Calculate Entropy and Randomness Here
+        double nextEntropy = EntropyRandomness::calculateEntropy(newDataBlocks);
+        
+        cipherEntropies.push_back(nextEntropy);
+
         std::string outputName = "plaintextvar/";
         outputName += getFlippedDataBitsFileName(plainTextBitsFlipped, i);
         outputName += ".txt";
@@ -146,7 +164,7 @@ int main() {
         std::cout << "Output Name: " << outputName << std::endl;
 
         newDataBlocks.writeToFile(outputName);
-        saveHistogram(outputName);
+        // saveHistogram(outputName);
 
         keyVarKey.flipBit(keyBitsFlipped.at(i));
     }
