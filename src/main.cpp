@@ -116,8 +116,8 @@ int main() {
 
     //key differential
 
-    std::ofstream keyEntropyFile("keyvar/entropy.csv");
-    std::ofstream keyRandomnessFile("keyvar/randomness.csv");
+    std::ofstream keyEntropyFile("keyvar/key_entropy.csv");
+    std::ofstream keyRandomnessFile("keyvar/key_randomness.csv");
     
     for(int i = 0; i < 20; i++){
 
@@ -155,8 +155,8 @@ int main() {
 
     // plain text data differential
     BlockConverter plainTextCopy = dataBlocks; //shallow copy block converter of OG data
-    std::ofstream cipherEntropyFile("plaintextvar/entropy.csv");
-    std::ofstream cipherRandomFile("plaintextvar/randomness.csv");
+    std::ofstream cipherEntropyFile("plaintextvar/cipher_entropy.csv");
+    std::ofstream cipherRandomFile("plaintextvar/cipher_randomness.csv");
 
     for(int i = 0; i < 20; i++){
         plainTextCopy.flipBitAtIndex(plainTextBitsFlipped.at(i));
