@@ -144,7 +144,7 @@ public:
             // currentBlock->hexPrint();
             for (int i = 1; i <= numProcessingSteps; i++) {   //9-13 rounds depending on key size
                 // std::cout << "Round " << i << std::endl;
-                Key currentKey = expandedKeys.at(i);
+                Key<KEY_128> currentKey = expandedKeys.at(i);
                 
 
                 // std::cout << "Current Block:\n";

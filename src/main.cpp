@@ -1,16 +1,15 @@
 #include "AES_Algorithm.h"
 #include <iostream>
-#include <bits/stdc++.h>
 #include <array>
 #include <fstream>
-#include <filesystem>
+// #include <filesystem>
 
 // clear keyvar and plaintextvar/ on every run
-void clearFolder(std::string folderPath)
-{
-    for (const auto& content : std::filesystem::directory_iterator(folderPath)) 
-        std::filesystem::remove_all(content.path());
-}
+// void clearFolder(std::string folderPath)
+// {
+//     for (const auto& content : std::filesystem::directory_iterator(folderPath)) 
+//         std::filesystem::remove_all(content.path());
+// }
 
 //given a list of data bits to be flipped print out each one that has been flipped so far
 std::string getFlippedDataBitsFileName(std::vector<int> v, int iterator_index){
@@ -72,12 +71,12 @@ int main() {
     std::cin >> plainTextLocation;
 
     // create directories to store our ciphertexts if they  dont already exist
-    std::filesystem::create_directories("keyvar");
-    std::filesystem::create_directories("plaintextvar");
+    // std::filesystem::create_directories("keyvar");
+    // std::filesystem::create_directories("plaintextvar");
 
     // clear the folders of any left-over ciphertexts.
-    clearFolder("keyvar");
-    clearFolder("plaintextvar");
+    // clearFolder("keyvar");
+    // clearFolder("plaintextvar");
 
 
     std::srand(time(0));
